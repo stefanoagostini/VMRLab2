@@ -3,14 +3,13 @@ from keras.models import load_model
 import keras.backend as K
 from keras.preprocessing.image import ImageDataGenerator
 from sklearn.metrics import confusion_matrix, classification_report
-import numpy as np
 import time
 
 
 IMAGE_WIDTH = IMAGE_HEIGHT = 256
 
 ap = argparse.ArgumentParser()
-ap.add_argument("-m", "--model", default="MobileNetV2.h5")
+ap.add_argument("-m", "--model", default="MiniVGG_wts.hdf5")
 args = vars(ap.parse_args())
 model_path = args["model"]
 
@@ -40,7 +39,13 @@ predicted_classes = predictions
 predicted_classes[predicted_classes <= 0.5] = 0
 predicted_classes[predicted_classes > 0.5] = 1
 print(test_generator.class_indices)
+print(model.evaluate_generator(test_generator, steps=test_generator.samples))
 report = classification_report(test_generator.classes, predicted_classes, target_names=test_generator.class_indices)
 print(report)
 confusion = confusion_matrix(test_generator.classes, predicted_classes)
 print(confusion)
+
+# Confusion matrix with tensor flow
+import tensorflow
+c = tensorflow.math.confusion_matrix(labels=test_generator.classes, predictions=predicted_classes)
+print(c.eval(session=tensorflow.compat.v1.Session()))
