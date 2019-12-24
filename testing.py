@@ -9,7 +9,7 @@ import time
 IMAGE_WIDTH = IMAGE_HEIGHT = 256
 
 ap = argparse.ArgumentParser()
-ap.add_argument("-m", "--model", default="MiniVGG_wts.hdf5")
+ap.add_argument("-m", "--model", default="myNet1_0.001.hdf5")
 args = vars(ap.parse_args())
 model_path = args["model"]
 
@@ -46,6 +46,6 @@ confusion = confusion_matrix(test_generator.classes, predicted_classes)
 print(confusion)
 
 # Confusion matrix with tensor flow
-import tensorflow
-c = tensorflow.math.confusion_matrix(labels=test_generator.classes, predictions=predicted_classes)
-print(c.eval(session=tensorflow.compat.v1.Session()))
+# import tensorflow
+# c = tensorflow.math.confusion_matrix(labels=test_generator.classes, predictions=predicted_classes)
+# print(c.eval(session=tensorflow.compat.v1.Session()))
